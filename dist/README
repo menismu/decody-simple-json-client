@@ -3,11 +3,11 @@ Decody Simple JSON Client
 
 ### Changelog
 
-## v0.1 (04/2015)
-
-- First version of the library.
-
 ## v0.2 (10/2015)
 
 - PUT and DELETE operations implemented.
 - Bug fixed - Gson factory not used.
+
+## v0.1 (04/2015)
+
+- First version of the library.
