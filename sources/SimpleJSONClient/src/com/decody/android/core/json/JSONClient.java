@@ -1,5 +1,4 @@
 /*
- * Copyright (C) 2015 Decody Software.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,8 +26,10 @@ import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpPut;
 import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.conn.scheme.Scheme;
 import org.apache.http.conn.scheme.SchemeRegistry;
@@ -44,15 +45,17 @@ import com.decody.android.core.json.exceptions.ResourceNotFoundException;
 import com.decody.android.core.json.exceptions.UnauthorizedException;
 import com.decody.android.core.json.integration.DefaultGsonFactory;
 import com.decody.android.core.json.integration.GsonFactory;
-import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 
 /**
- * JSON Client implementation using Gson library as data serialization / deserialization.
+ * JSON Client implementation using Gson library as data serialization /
+ * deserialization.
  */
 public class JSONClient implements Client {
 
 	private static String TAG = "JSONClient";
+	
+	private static String CONTENT_TYPE = "application/json";
 
 	protected DefaultHttpClient client;
 
@@ -95,10 +98,10 @@ public class JSONClient implements Client {
 
 	public <T> T post(String url, Class<T> classOfT, T data) throws ResourceNotFoundException, UnauthorizedException {
 		HttpPost post = new HttpPost(url);
-		post.addHeader("Content-Type", "application/json");
+		post.addHeader("Content-Type", CONTENT_TYPE);
 
 		try {
-			post.setEntity(new StringEntity(new Gson().toJson(data)));
+			post.setEntity(new StringEntity(factory.newInstance().toJson(data)));
 		} catch (UnsupportedEncodingException e1) {
 			throw new IllegalArgumentException(
 					"input data is not valid, check the input data to call the post service: " + url + " - "
@@ -106,6 +109,25 @@ public class JSONClient implements Client {
 		}
 
 		return performCall(post, classOfT);
+	}
+
+	public <T> T put(String url, Class<T> classOfT, T data) throws ResourceNotFoundException, UnauthorizedException {
+		HttpPut put = new HttpPut(url);
+		put.addHeader("Content-Type", CONTENT_TYPE);
+
+		try {
+			put.setEntity(new StringEntity(factory.newInstance().toJson(data)));
+		} catch (UnsupportedEncodingException e) {
+			throw new IllegalArgumentException(
+					"input data is not valid, check the input data to call the post service: " + url + " - "
+							+ classOfT.toString());
+		}
+
+		return performCall(put, classOfT);
+	}
+	
+	public <T> T delete(String url, Class<T> classOfT) throws ResourceNotFoundException, UnauthorizedException {
+		return performCall(new HttpDelete(url), classOfT);
 	}
 
 	private <T> T performCall(HttpRequestBase request, Class<T> classOfT) throws ResourceNotFoundException,

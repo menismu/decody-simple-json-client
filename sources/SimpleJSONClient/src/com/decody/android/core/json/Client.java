@@ -28,9 +28,9 @@ public interface Client {
 	 * Perform a GET call to the remote url.
 	 * 
 	 * @param url
-	 *            Remote url which do the call.
+	 *            Remote url.
 	 * @param classOfT
-	 *            Class to consider for the communication.
+	 *            Parametrised class for communication model.
 	 * @return The response received from the remote server.
 	 * @throws ResourceNotFoundException
 	 * @throws UnauthorizedException
@@ -41,9 +41,9 @@ public interface Client {
 	 * Perform a POST call to the remote url.
 	 * 
 	 * @param url
-	 *            Remote url which do the call.
+	 *            Remote url.
 	 * @param classOfT
-	 *            Class to consider for the communication.
+	 *            Parametrised class for communication model.
 	 * @param data
 	 *            Data to send over the post call.
 	 * @return The response received from the remote server.
@@ -51,4 +51,32 @@ public interface Client {
 	 * @throws UnauthorizedException
 	 */
 	<T> T post(String url, Class<T> classOfT, T data) throws ResourceNotFoundException, UnauthorizedException;
+
+	/**
+	 * Perform a PUT call to the remote url.
+	 * 
+	 * @param url
+	 *            Remote url.
+	 * @param classofT
+	 *            Parametrised class for communication model.
+	 * @param data
+	 *            Data to send over the put call.
+	 * @return The response received from the remote server.
+	 * @throws ResourceNotFoundException
+	 * @throws UnauthorizedException
+	 */
+	<T> T put(String url, Class<T> classofT, T data) throws ResourceNotFoundException, UnauthorizedException;
+
+	/**
+	 * Perform a DELETE call to the remote url
+	 * 
+	 * @param url
+	 *            Remote url.
+	 * @param classOfT
+	 *            Parametrised class for communication model.
+	 * @return The response received from the remote server.
+	 * @throws ResourceNotFoundException
+	 * @throws UnauthorizedException
+	 */
+	<T> T delete(String url, Class<T> classOfT) throws ResourceNotFoundException, UnauthorizedException;
 }
